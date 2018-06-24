@@ -25,6 +25,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 //    LocationManager locationManager;
 
     LocationTrack locationTrack;
-
+    GraphView graph;
+    private double graph2LastXValue = 0d;
+    LineGraphSeries mSeries1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +62,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         text = (TextView) findViewById(R.id.txt);
+        graph = (GraphView) findViewById(R.id.graph);
+        
+//        DataPoint[] values = new DataPoint[1];
+//        values[0] =new DataPoint(0,0);
+//        mSeries1 = new LineGraphSeries<>(values);
 
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mSeries1 = new LineGraphSeries<>();
 
+        graph.addSeries(mSeries1);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(15);
     }
 
     @Override
@@ -81,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if(latitude != 0 && longitude  != 0 ){
                 new add_event().execute( ""+vib,""+ latitude,""+longitude,ts);
             }
+            graph2LastXValue += 1d;
+            mSeries1.appendData(new DataPoint(graph2LastXValue,vib), true, 40);
             text.setText("\tX : "+x+ "\n\tY :  "+y+"\n\tZ : "+ z+"\n\tVIB : "+vib+"\n\tlongitude : "+longitude+"\n\t longitude: "+latitude+"\n\t Time: "+ts);
 
 
