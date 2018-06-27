@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     LineGraphSeries mSeries1;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
         mSeries1 = new LineGraphSeries<>();
+        mSeries1.setColor(getColor(R.color.colorzorro));
 
         graph.addSeries(mSeries1);
         graph.getViewport().setXAxisBoundsManual(true);
@@ -103,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             graph2LastXValue += 1d;
             mSeries1.appendData(new DataPoint(graph2LastXValue,vib), true, 40);
-            text.setText("\tX : "+x+ "\n\tY :  "+y+"\n\tZ : "+ z+"\n\tVIB : "+vib+"\n\tlongitude : "+longitude+"\n\t longitude: "+latitude+"\n\t Time: "+ts);
+//            text.setText(""+x);
+            text.setText("\tX : "+x+ "\n\tY :  "+y+"\n\tZ : "+ z+"\n\tVIB : "+vib+"\n\tLongitude : "+longitude+"\n\tLatitude: "+latitude+"\n\tTime: "+ts);
 
 
         }
